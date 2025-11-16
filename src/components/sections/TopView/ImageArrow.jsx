@@ -1,12 +1,13 @@
 import React, { useEffect, useState, forwardRef } from "react"
 import PropTypes from "prop-types"
+import defaultArrowSvg from "../../../assets/images/icons/arrow.svg"
 
 const ImageArrow = forwardRef(function ImageArrow(
   {
     imageRef,
     xPercent = 50,
     yPercent = 50,
-    src = "/arrow.svg",
+    src = defaultArrowSvg,
     minSize = 20,
     vw = 4,
     maxSize = 48,

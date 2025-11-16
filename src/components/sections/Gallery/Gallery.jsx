@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Pagination, Autoplay } from "swiper/modules"
 import FeaturesGrid from "./FeaturesGrid"
+import logoImg from "../../../assets/images/icons/Logo.svg"
 
 // Import Swiper styles
 import "swiper/css"
@@ -157,7 +158,7 @@ export default function Gallery() {
                       {selectedImage.id === image.id ? (
                         <div className="w-full h-full bg-panel flex items-center justify-center">
                           <img
-                            src="/Logo.svg"
+                            src={logoImg}
                             alt="Логотип INTEGRAL"
                             className="max-w-full max-h-full w-auto h-auto opacity-60"
                           />

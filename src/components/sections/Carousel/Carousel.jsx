@@ -163,13 +163,12 @@ export default function Carousel() {
   const dragStartScrollLeft = useRef(0)
   const isDraggingRef = useRef(false) // Ref для доступа к состоянию перетаскивания в обработчиках
 
-  // Refs для touch-событий
+  // Refs для touch-событий (мобильные устройства)
   const touchStartX = useRef(0)
   const touchStartY = useRef(0)
   const touchStartScrollLeft = useRef(0)
-  const isScrollingRef = useRef(false) // Отслеживание скролла/свайпа
-  const touchTooltipTimeoutRef = useRef(null) // Таймер для задержки показа тултипа на touch
-  const SWIPE_THRESHOLD = 10 // Порог в пикселях для определения свайпа
+  const hasMovedRef = useRef(false) // Флаг движения при touch
+  const touchTargetIndexRef = useRef(null) // Индекс элемента под пальцем
 
   useEffect(() => {
     const track = trackRef.current
@@ -199,16 +198,6 @@ export default function Carousel() {
       if (autoScrollTimeoutRef.current) {
         clearTimeout(autoScrollTimeoutRef.current)
         autoScrollTimeoutRef.current = null
-      }
-    }
-  }, [])
-
-  // Очистка таймера тултипа при размонтировании
-  useEffect(() => {
-    return () => {
-      if (touchTooltipTimeoutRef.current) {
-        clearTimeout(touchTooltipTimeoutRef.current)
-        touchTooltipTimeoutRef.current = null
       }
     }
   }, [])
@@ -393,85 +382,28 @@ export default function Carousel() {
     }
   }
 
-  // Обработчики touch-событий для свайпа
+  // Обработчики touch-событий для мобильных устройств
   const handleTouchStart = (e) => {
     const container = carouselRef.current
     if (!container) return
 
-    // Отменяем автопрокрутку при начале перетаскивания
+    // Отменяем автопрокрутку
     if (autoScrollTimeoutRef.current) {
       clearTimeout(autoScrollTimeoutRef.current)
       autoScrollTimeoutRef.current = null
     }
     autoScrollDirectionRef.current = null
 
-    // Очищаем таймер тултипа если он был
-    if (touchTooltipTimeoutRef.current) {
-      clearTimeout(touchTooltipTimeoutRef.current)
-      touchTooltipTimeoutRef.current = null
-    }
-
     const touch = e.touches[0]
     touchStartX.current = touch.pageX
     touchStartY.current = touch.pageY
     touchStartScrollLeft.current = container.scrollLeft
+    hasMovedRef.current = false
+    touchTargetIndexRef.current = null
 
-    setIsDragging(true)
-    isDraggingRef.current = true
-    isScrollingRef.current = false
-
-    // Отключаем hover во время перетаскивания
-    setHoveredIndex(null)
-  }
-
-  const handleTouchMove = (e) => {
-    if (!isDragging) return
-
-    const container = carouselRef.current
-    if (!container) return
-
-    const touch = e.touches[0]
-    const deltaX = touch.pageX - touchStartX.current
-    const deltaY = touch.pageY - touchStartY.current
-
-    // Определяем, был ли свайп (горизонтальный или вертикальный)
-    if (
-      Math.abs(deltaX) > SWIPE_THRESHOLD ||
-      Math.abs(deltaY) > SWIPE_THRESHOLD
-    ) {
-      isScrollingRef.current = true
-    }
-
-    // Прокручиваем карусель
-    const walk = (touch.pageX - touchStartX.current) * 1.5
-    container.scrollLeft = touchStartScrollLeft.current - walk
-  }
-
-  const handleTouchEnd = (e) => {
-    if (!isDragging) return
-
-    const container = carouselRef.current
-    if (!container) return
-
-    const touch = e.changedTouches[0]
-    const deltaX = touch.pageX - touchStartX.current
-    const deltaY = touch.pageY - touchStartY.current
-    const totalDelta = Math.hypot(deltaX, deltaY)
-
-    setIsDragging(false)
-    isDraggingRef.current = false
-
-    // Если был свайп, не показываем тултип
-    if (isScrollingRef.current || totalDelta > SWIPE_THRESHOLD) {
-      setHoveredIndex(null)
-      isScrollingRef.current = false
-      return
-    }
-
-    // Если не было свайпа, определяем элемент под пальцем и показываем тултип с задержкой
+    // Определяем элемент под пальцем
     const touchX = touch.clientX
     const touchY = touch.clientY
-
     for (let i = 0; i < buttonRefs.current.length; i++) {
       const button = buttonRefs.current[i]
       if (!button) continue
@@ -483,16 +415,51 @@ export default function Carousel() {
         touchY >= rect.top &&
         touchY <= rect.bottom
       ) {
-        // Показываем тултип с небольшой задержкой для лучшего UX
-        touchTooltipTimeoutRef.current = setTimeout(() => {
-          setHoveredIndex(i)
-          touchTooltipTimeoutRef.current = null
-        }, 300) // 300ms задержка
+        touchTargetIndexRef.current = i
         break
       }
     }
 
-    isScrollingRef.current = false
+    setIsDragging(true)
+    isDraggingRef.current = true
+    setHoveredIndex(null)
+  }
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return
+
+    const container = carouselRef.current
+    if (!container) return
+
+    const touch = e.touches[0]
+    const deltaX = Math.abs(touch.pageX - touchStartX.current)
+    const deltaY = Math.abs(touch.pageY - touchStartY.current)
+
+    // Если движение больше порога, считаем это свайпом
+    if (deltaX > 5 || deltaY > 5) {
+      hasMovedRef.current = true
+    }
+
+    // Прокручиваем карусель
+    const walk = (touch.pageX - touchStartX.current) * 1.5
+    container.scrollLeft = touchStartScrollLeft.current - walk
+  }
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return
+
+    setIsDragging(false)
+    isDraggingRef.current = false
+
+    // Если не было движения (просто тап), показываем тултип
+    if (!hasMovedRef.current && touchTargetIndexRef.current !== null) {
+      setHoveredIndex(touchTargetIndexRef.current)
+    } else {
+      setHoveredIndex(null)
+    }
+
+    hasMovedRef.current = false
+    touchTargetIndexRef.current = null
   }
 
   // Глобальный обработчик mousemove для перетаскивания за пределами контейнера

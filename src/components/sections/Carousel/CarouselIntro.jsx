@@ -1,3 +1,5 @@
+import depoStormImg from "../../../assets/images/DEPO-Storm-1430B1R.png"
+
 export default function CarouselIntro() {
   return (
     <section className="relative w-full pt-2 bg-brand-deep-teal flex flex-col lg:flex-row items-center overflow-hidden">
@@ -33,7 +35,7 @@ export default function CarouselIntro() {
       {/* Картинка - скрыта на мобильных, порядок 1 на десктопе */}
       <div className="relative left-0 top-0 w-full h-full flex items-center order-2 lg:order-1 hidden lg:flex">
         <img
-          src="/DEPO-Storm-1430B1R.png"
+          src={depoStormImg}
           alt="DEPO Storm 1430B1R"
           className="w-auto object-contain"
           style={{ transform: "translateX(-50%)" }}

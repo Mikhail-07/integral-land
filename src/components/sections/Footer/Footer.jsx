@@ -1,4 +1,9 @@
 import React from "react"
+import chipTuneLogo from "../../../assets/images/icons/chip-tune-logo-blue 1.svg"
+import youtubeIcon from "../../../assets/images/icons/youtube.svg"
+import tgIcon from "../../../assets/images/icons/tg.svg"
+import whatsappIcon from "../../../assets/images/icons/whatsapp.svg"
+import logoImg from "../../../assets/images/icons/Logo.svg"
 
 export default function Footer() {
   return (
@@ -10,7 +15,7 @@ export default function Footer() {
             <h3 className="text-sm font-semibold mb-4">Производитель</h3>
 
             <img
-              src="/chip-tune-logo-blue 1.svg"
+              src={chipTuneLogo}
               alt="ЧИПТОН"
               className="w-36 h-12 mb-4"
               aria-hidden={false}
@@ -33,21 +38,21 @@ export default function Footer() {
                   className="p-1 hover:opacity-90"
                   aria-label="YouTube"
                 >
-                  <img src="/youtube.svg" alt="YouTube" />
+                  <img src={youtubeIcon} alt="YouTube" />
                 </a>
                 <a
                   href="#"
                   className="p-1 hover:opacity-90"
                   aria-label="Telegram"
                 >
-                  <img src="/tg.svg" alt="Telegram" />
+                  <img src={tgIcon} alt="Telegram" />
                 </a>
                 <a
                   href="#"
                   className="p-1 hover:opacity-90"
                   aria-label="WhatsApp"
                 >
-                  <img src="/whatsapp.svg" alt="WhatsApp" />
+                  <img src={whatsappIcon} alt="WhatsApp" />
                 </a>
               </div>
             </div>
@@ -58,7 +63,7 @@ export default function Footer() {
             <h3 className="text-sm mb-4  font-semibold">Дистрибьютор</h3>
 
             <div className="flex items-center space-x-2 mb-4 h-12">
-              <img src="/Logo.svg" alt="Integral Project" className="h-12" />
+              <img src={logoImg} alt="Integral Project" className="h-12" />
               <div className="flex flex-col items-end">
                 <span className="text-lg font-bold text-yellow-400">
                   INTEGRAL
@@ -84,21 +89,21 @@ export default function Footer() {
                   className="p-1 hover:opacity-90"
                   aria-label="YouTube"
                 >
-                  <img src="/youtube.svg" alt="YouTube" />
+                  <img src={youtubeIcon} alt="YouTube" />
                 </a>
                 <a
                   href="#"
                   className="p-1 hover:opacity-90"
                   aria-label="Telegram"
                 >
-                  <img src="/tg.svg" alt="Telegram" />
+                  <img src={tgIcon} alt="Telegram" />
                 </a>
                 <a
                   href="#"
                   className="p-1 hover:opacity-90"
                   aria-label="WhatsApp"
                 >
-                  <img src="/whatsapp.svg" alt="WhatsApp" />
+                  <img src={whatsappIcon} alt="WhatsApp" />
                 </a>
               </div>
             </div>

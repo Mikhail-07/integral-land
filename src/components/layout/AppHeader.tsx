@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import logoImg from "../../assets/images/icons/Logo.svg"
 
 export default function Header() {
   const [isVisible, setIsVisible] = useState(true)
@@ -52,7 +53,7 @@ export default function Header() {
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
         {/* Логотип */}
         <div className="flex items-center space-x-2">
-          <img src="/Logo.svg" alt="Integral Project" className="h-12" />
+          <img src={logoImg} alt="Integral Project" className="h-12" />
           <div className="flex flex-col items-end">
             <span className="text-lg font-bold text-yellow-400">INTEGRAL</span>
             <span className="text-xs font-bold">PROJECT</span>

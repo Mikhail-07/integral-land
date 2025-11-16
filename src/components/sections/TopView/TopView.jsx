@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import topViewImage from "../../../assets/images/top-view-no-roof.webp"
+import arrowSvg from "../../../assets/images/icons/arrow.svg"
+import arrowDownSvg from "../../../assets/images/icons/arrow_down.svg"
 import TextBlock from "./TextBlock"
 import TextBlock2 from "./TextBlock2"
 import TextBlock3 from "./TextBlock3"
@@ -795,14 +797,14 @@ const PhaseScroller = () => {
         imageRef={imageRef}
         xPercent={46}
         yPercent={50}
-        src="/arrow.svg"
+        src={arrowSvg}
       />
       <ImageArrow
         ref={arrowRef2}
         imageRef={imageRef}
         xPercent={70}
         yPercent={50}
-        src="/arrow_down.svg"
+        src={arrowDownSvg}
       />
       <div ref={textRef5} className="absolute z-30">
         <TextBlock5 />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
+import logoImg from "../assets/images/icons/Logo.svg"
 
 export default function CustomLoader({ onLoaded }) {
   const [isFlyingAway, setIsFlyingAway] = useState(false)
@@ -27,7 +28,7 @@ export default function CustomLoader({ onLoaded }) {
     >
       <div className="flex flex-col items-center space-y-4">
         {/* Логотип */}
-        <img src="/Logo.svg" alt="Integral Project" className="h-16 w-auto" />
+        <img src={logoImg} alt="Integral Project" className="h-16 w-auto" />
 
         {/* Текст с анимацией светлой тени */}
         <div className="relative">
