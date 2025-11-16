@@ -153,6 +153,7 @@ export default function Carousel() {
   const [hoveredIndex, setHoveredIndex] = useState(null)
   const [loadedImages, setLoadedImages] = useState(new Set()) // Отслеживание загруженных изображений
   const [isDragging, setIsDragging] = useState(false) // Состояние перетаскивания
+  const [isTouchDevice, setIsTouchDevice] = useState(false) // Флаг для touch-устройств
 
   // Фиксированные размеры для карусели
   const SLIDE_WIDTH = 300 // Фиксированная ширина слайда
@@ -163,12 +164,12 @@ export default function Carousel() {
   const dragStartScrollLeft = useRef(0)
   const isDraggingRef = useRef(false) // Ref для доступа к состоянию перетаскивания в обработчиках
 
-  // Refs для touch-событий (мобильные устройства)
-  const touchStartX = useRef(0)
-  const touchStartY = useRef(0)
-  const touchStartScrollLeft = useRef(0)
-  const hasMovedRef = useRef(false) // Флаг движения при touch
-  const touchTargetIndexRef = useRef(null) // Индекс элемента под пальцем
+  // Определяем, является ли устройство touch-устройством
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0)
+    }
+  }, [])
 
   useEffect(() => {
     const track = trackRef.current
@@ -382,86 +383,6 @@ export default function Carousel() {
     }
   }
 
-  // Обработчики touch-событий для мобильных устройств
-  const handleTouchStart = (e) => {
-    const container = carouselRef.current
-    if (!container) return
-
-    // Отменяем автопрокрутку
-    if (autoScrollTimeoutRef.current) {
-      clearTimeout(autoScrollTimeoutRef.current)
-      autoScrollTimeoutRef.current = null
-    }
-    autoScrollDirectionRef.current = null
-
-    const touch = e.touches[0]
-    touchStartX.current = touch.pageX
-    touchStartY.current = touch.pageY
-    touchStartScrollLeft.current = container.scrollLeft
-    hasMovedRef.current = false
-    touchTargetIndexRef.current = null
-
-    // Определяем элемент под пальцем
-    const touchX = touch.clientX
-    const touchY = touch.clientY
-    for (let i = 0; i < buttonRefs.current.length; i++) {
-      const button = buttonRefs.current[i]
-      if (!button) continue
-
-      const rect = button.getBoundingClientRect()
-      if (
-        touchX >= rect.left &&
-        touchX <= rect.right &&
-        touchY >= rect.top &&
-        touchY <= rect.bottom
-      ) {
-        touchTargetIndexRef.current = i
-        break
-      }
-    }
-
-    setIsDragging(true)
-    isDraggingRef.current = true
-    setHoveredIndex(null)
-  }
-
-  const handleTouchMove = (e) => {
-    if (!isDragging) return
-
-    const container = carouselRef.current
-    if (!container) return
-
-    const touch = e.touches[0]
-    const deltaX = Math.abs(touch.pageX - touchStartX.current)
-    const deltaY = Math.abs(touch.pageY - touchStartY.current)
-
-    // Если движение больше порога, считаем это свайпом
-    if (deltaX > 5 || deltaY > 5) {
-      hasMovedRef.current = true
-    }
-
-    // Прокручиваем карусель
-    const walk = (touch.pageX - touchStartX.current) * 1.5
-    container.scrollLeft = touchStartScrollLeft.current - walk
-  }
-
-  const handleTouchEnd = () => {
-    if (!isDragging) return
-
-    setIsDragging(false)
-    isDraggingRef.current = false
-
-    // Если не было движения (просто тап), показываем тултип
-    if (!hasMovedRef.current && touchTargetIndexRef.current !== null) {
-      setHoveredIndex(touchTargetIndexRef.current)
-    } else {
-      setHoveredIndex(null)
-    }
-
-    hasMovedRef.current = false
-    touchTargetIndexRef.current = null
-  }
-
   // Глобальный обработчик mousemove для перетаскивания за пределами контейнера
   useEffect(() => {
     if (!isDragging) return
@@ -532,9 +453,6 @@ export default function Carousel() {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
         aria-label="Карусель устройств"
         className={`relative w-full z-10 bg-brand-deep-teal mt-8 overflow-x-auto hide-scrollbar ${
           isDragging ? "cursor-grabbing select-none" : "cursor-grab"
@@ -562,13 +480,20 @@ export default function Carousel() {
                 // фиксированная ширина слайда
                 style={{ width: `${SLIDE_WIDTH}px` }}
                 onMouseEnter={() => {
-                  if (!isDragging) {
+                  // hover только для устройств с мышью (не touch)
+                  if (!isDragging && !isTouchDevice) {
                     setHoveredIndex(index)
                   }
                 }}
                 onMouseLeave={() => {
-                  if (!isDragging) {
+                  if (!isDragging && !isTouchDevice) {
                     setHoveredIndex(null)
+                  }
+                }}
+                onClick={() => {
+                  // На мобильных тултипы показываем только по тапу
+                  if (!isDragging && isTouchDevice) {
+                    setHoveredIndex(hoveredIndex === index ? null : index)
                   }
                 }}
                 onKeyDown={(e) => {

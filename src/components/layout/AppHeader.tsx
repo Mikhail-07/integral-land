@@ -5,6 +5,7 @@ export default function Header() {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+  const SCROLL_THRESHOLD = 20 // Минимальное расстояние скролла для показа хедера
 
   const handleScrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId)
@@ -19,6 +20,7 @@ export default function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
+      const scrollDifference = lastScrollY - currentScrollY
 
       // Показываем меню при наведении курсора
       if (isHovered) {
@@ -26,8 +28,8 @@ export default function Header() {
         return
       }
 
-      // Показываем меню при скролле вверх или в самом верху страницы
-      if (currentScrollY < lastScrollY || currentScrollY < 10) {
+      // Показываем меню при явном скролле вверх (больше порога) или в самом верху страницы
+      if (scrollDifference > SCROLL_THRESHOLD || currentScrollY < 10) {
         setIsVisible(true)
       }
       // Скрываем меню при скролле вниз
