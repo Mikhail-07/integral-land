@@ -153,7 +153,6 @@ export default function Carousel() {
   const [hoveredIndex, setHoveredIndex] = useState(null)
   const [loadedImages, setLoadedImages] = useState(new Set()) // Отслеживание загруженных изображений
   const [isDragging, setIsDragging] = useState(false) // Состояние перетаскивания
-  const [isSmallScreen, setIsSmallScreen] = useState(false) // Флаг для небольших экранов (мобильных)
 
   // Фиксированные размеры для карусели
   const SLIDE_WIDTH = 300 // Фиксированная ширина слайда
@@ -163,22 +162,6 @@ export default function Carousel() {
   const dragStartX = useRef(0)
   const dragStartScrollLeft = useRef(0)
   const isDraggingRef = useRef(false) // Ref для доступа к состоянию перетаскивания в обработчиках
-
-  // Определяем мобильный режим по размеру экрана
-  useEffect(() => {
-    const updateScreenSize = () => {
-      if (typeof window !== "undefined") {
-        setIsSmallScreen(window.innerWidth <= 768)
-      }
-    }
-
-    updateScreenSize()
-    window.addEventListener("resize", updateScreenSize)
-
-    return () => {
-      window.removeEventListener("resize", updateScreenSize)
-    }
-  }, [])
 
   useEffect(() => {
     const track = trackRef.current
@@ -489,20 +472,23 @@ export default function Carousel() {
                 // фиксированная ширина слайда
                 style={{ width: `${SLIDE_WIDTH}px` }}
                 onMouseEnter={() => {
-                  // hover только для больших экранов (десктоп)
-                  if (!isDragging && !isSmallScreen) {
+                  if (!isDragging) {
                     setHoveredIndex(index)
                   }
                 }}
                 onMouseLeave={() => {
-                  if (!isDragging && !isSmallScreen) {
+                  if (!isDragging) {
                     setHoveredIndex(null)
                   }
                 }}
-                onClick={() => {
-                  // На мобильных (небольших экранах) тултипы показываем только по тапу
-                  if (!isDragging && isSmallScreen) {
-                    setHoveredIndex(hoveredIndex === index ? null : index)
+                onTouchStart={() => {
+                  if (!isDragging) {
+                    setHoveredIndex(index)
+                  }
+                }}
+                onTouchEnd={() => {
+                  if (!isDragging) {
+                    setHoveredIndex(null)
                   }
                 }}
                 onKeyDown={(e) => {
