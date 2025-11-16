@@ -1,0 +1,131 @@
+/* Кастомные CSS классы для цветов бренда */
+
+/* Фоны */
+.bg-brand-deep-teal {
+  background-color: var(--color-brand-deep-teal);
+}
+.bg-brand-amber {
+  background-color: var(--color-brand-amber);
+}
+.bg-panel {
+  background-color: var(--color-panel);
+}
+.bg-grey-2 {
+  background-color: var(--color-grey-2);
+}
+.bg-grey-3 {
+  background-color: var(--color-grey-3);
+}
+
+/* Текст */
+.text-brand-white {
+  color: var(--color-brand-white);
+}
+.text-brand-amber {
+  color: var(--color-brand-amber);
+}
+.text-grey-1 {
+  color: var(--color-grey-1);
+}
+.text-grey-7 {
+  color: var(--color-grey-7);
+}
+.text-grey-8 {
+  color: var(--color-grey-8);
+}
+
+/* Границы */
+.border-divider {
+  border-color: var(--color-divider);
+}
+.border-brand-amber {
+  border-color: var(--color-brand-amber);
+}
+.border-grey-4 {
+  border-color: var(--color-grey-4);
+}
+.border-grey-5 {
+  border-color: var(--color-grey-5);
+}
+
+/* Ховер эффекты */
+.hover\:bg-brand-amber:hover {
+  background-color: var(--color-brand-amber);
+}
+.hover\:text-brand-amber:hover {
+  color: var(--color-brand-amber);
+}
+.hover\:border-brand-amber:hover {
+  border-color: var(--color-brand-amber);
+}
+
+/* Фокус эффекты */
+.focus\:ring-brand-amber:focus {
+  --tw-ring-color: var(--color-brand-amber);
+}
+.focus\:border-brand-amber:focus {
+  border-color: var(--color-brand-amber);
+}
+
+/* Градиенты */
+.bg-gradient-brand {
+  background: linear-gradient(
+    135deg,
+    var(--color-brand-deep-teal) 0%,
+    var(--color-panel) 100%
+  );
+}
+
+.bg-gradient-amber {
+  background: linear-gradient(
+    135deg,
+    var(--color-brand-amber) 0%,
+    #f4d03f 100%
+  );
+}
+
+/* Тени */
+.shadow-brand {
+  box-shadow: 0 4px 6px -1px rgba(14, 64, 63, 0.1),
+    0 2px 4px -1px rgba(14, 64, 63, 0.06);
+}
+
+.shadow-amber {
+  box-shadow: 0 4px 6px -1px rgba(225, 180, 37, 0.1),
+    0 2px 4px -1px rgba(225, 180, 37, 0.06);
+}
+
+/* Swiper кастомные стили с фирменными цветами */
+.swiper-pagination {
+  position: relative !important;
+  margin-top: 1.5rem !important;
+}
+
+.swiper-pagination-bullet {
+  width: 8px !important;
+  height: 8px !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1 !important;
+  margin: 0 4px !important;
+  transition: all 0.3s ease !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #e1b425 !important;
+  width: 24px !important;
+  border-radius: 4px !important;
+}
+
+.gallery-pagination .swiper-pagination-bullet-active {
+  background-color: #e1b425 !important;
+}
+
+/* Скрытие скроллбара для карусели */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE и Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

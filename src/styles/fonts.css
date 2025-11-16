@@ -1,0 +1,46 @@
+/* Font utility classes - fonts are loaded via Google Fonts import in index.css */
+
+.font-pt-serif {
+  font-family: "PT Serif", serif;
+}
+
+.text-body {
+  font-family: "PT Serif", serif;
+  font-size: 1.25rem;
+  line-height: 120%;
+}
+
+.text-heading {
+  font-family: "PT Serif", serif;
+  font-size: 3rem;
+  line-height: 110%;
+}
+
+.text-heading-2 {
+  font-family: "PT Serif", serif;
+  font-size: 2rem;
+  line-height: 110%;
+}
+
+.text-heading-3 {
+  font-family: "PT Serif", serif;
+  font-size: 1.5rem;
+  line-height: 110%;
+}
+
+.font-pt-sans {
+  font-family: "PT Sans", sans-serif;
+  font-size: 1rem;
+}
+
+.text-body-sans {
+  font-family: "PT Sans", sans-serif;
+  font-size: var(--Font-Size-md, 1rem);
+  line-height: 120%;
+}
+
+.text-heading-sans {
+  font-family: "PT Sans", sans-serif;
+  font-size: 3rem;
+  line-height: 110%;
+}
