@@ -6,5 +6,6 @@ import { imagetools } from "vite-imagetools"
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/integral-landing/",
   plugins: [lqip(), imagetools(), react(), tailwindcss()],
 })
