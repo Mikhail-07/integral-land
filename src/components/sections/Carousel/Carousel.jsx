@@ -153,7 +153,7 @@ export default function Carousel() {
   const [hoveredIndex, setHoveredIndex] = useState(null)
   const [loadedImages, setLoadedImages] = useState(new Set()) // Отслеживание загруженных изображений
   const [isDragging, setIsDragging] = useState(false) // Состояние перетаскивания
-  const [isTouchDevice, setIsTouchDevice] = useState(false) // Флаг для touch-устройств
+  const [isSmallScreen, setIsSmallScreen] = useState(false) // Флаг для небольших экранов (мобильных)
 
   // Фиксированные размеры для карусели
   const SLIDE_WIDTH = 300 // Фиксированная ширина слайда
@@ -164,10 +164,19 @@ export default function Carousel() {
   const dragStartScrollLeft = useRef(0)
   const isDraggingRef = useRef(false) // Ref для доступа к состоянию перетаскивания в обработчиках
 
-  // Определяем, является ли устройство touch-устройством
+  // Определяем мобильный режим по размеру экрана
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0)
+    const updateScreenSize = () => {
+      if (typeof window !== "undefined") {
+        setIsSmallScreen(window.innerWidth <= 768)
+      }
+    }
+
+    updateScreenSize()
+    window.addEventListener("resize", updateScreenSize)
+
+    return () => {
+      window.removeEventListener("resize", updateScreenSize)
     }
   }, [])
 
@@ -480,19 +489,19 @@ export default function Carousel() {
                 // фиксированная ширина слайда
                 style={{ width: `${SLIDE_WIDTH}px` }}
                 onMouseEnter={() => {
-                  // hover только для устройств с мышью (не touch)
-                  if (!isDragging && !isTouchDevice) {
+                  // hover только для больших экранов (десктоп)
+                  if (!isDragging && !isSmallScreen) {
                     setHoveredIndex(index)
                   }
                 }}
                 onMouseLeave={() => {
-                  if (!isDragging && !isTouchDevice) {
+                  if (!isDragging && !isSmallScreen) {
                     setHoveredIndex(null)
                   }
                 }}
                 onClick={() => {
-                  // На мобильных тултипы показываем только по тапу
-                  if (!isDragging && isTouchDevice) {
+                  // На мобильных (небольших экранах) тултипы показываем только по тапу
+                  if (!isDragging && isSmallScreen) {
                     setHoveredIndex(hoveredIndex === index ? null : index)
                   }
                 }}
